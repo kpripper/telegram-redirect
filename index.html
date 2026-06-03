@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="uk">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Залишити відгук</title>
+        <style>
+            body {
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+                margin: 0;
+                background: #f5f5f5;
+            }
+            .card {
+                background: white;
+                border-radius: 16px;
+                padding: 32px 24px;
+                text-align: center;
+                max-width: 340px;
+                box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+            }
+            .icon {
+                font-size: 48px;
+                margin-bottom: 12px;
+            }
+            h1 {
+                font-size: 20px;
+                margin: 0 0 8px;
+                color: #1a1a1a;
+            }
+            p {
+                font-size: 14px;
+                color: #666;
+                margin: 0 0 24px;
+                line-height: 1.5;
+            }
+            .btn {
+                display: block;
+                background: #4285f4;
+                color: white;
+                text-decoration: none;
+                border-radius: 10px;
+                padding: 14px 20px;
+                font-size: 15px;
+                font-weight: 600;
+                margin-bottom: 10px;
+            }
+            .btn-secondary {
+                background: #f0f0f0;
+                color: #333;
+            }
+            .hint {
+                font-size: 12px;
+                color: #999;
+                margin-top: 16px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <div class="icon">⭐</div>
+            <h1>Залишити відгук</h1>
+            <p>Перехід до Google Maps для написання відгуку...</p>
+            <a id="maps-btn" class="btn" href="#">Відкрити Google Maps</a>
+            <a
+                id="web-btn"
+                class="btn btn-secondary"
+                href="https://search.google.com/local/writereview?placeid=ChIJAeAs-z3P1EARD1f6SxZa5yI"
+                >Відкрити у браузері</a
+            >
+            <p class="hint" id="hint"></p>
+        </div>
+
+        <script>
+            var placeId = "ChIJAeAs-z3P1EARD1f6SxZa5yI";
+            var webUrl =
+                "https://search.google.com/local/writereview?placeid=" +
+                placeId;
+            var ua = navigator.userAgent || "";
+            var isAndroid = /Android/i.test(ua);
+            var isIOS = /iPhone|iPad|iPod/i.test(ua);
+            var mapsBtn = document.getElementById("maps-btn");
+            var hint = document.getElementById("hint");
+
+            if (isAndroid) {
+                var fallback = encodeURIComponent(webUrl);
+                var intent =
+                    "intent://maps.google.com/maps?action=reviewWrite&placeid=" +
+                    placeId +
+                    "#Intent;scheme=https;package=com.google.android.apps.maps;" +
+                    "S.browser_fallback_url=" +
+                    fallback +
+                    ";end";
+                mapsBtn.href = intent;
+                hint.textContent =
+                    "Android: відкриє додаток Google Maps або системний браузер";
+                // Авто-редирект
+                setTimeout(function () {
+                    window.location.href = intent;
+                }, 800);
+            } else if (isIOS) {
+                var iosScheme =
+                    "comgooglemaps://?action=reviewWrite&placeid=" + placeId;
+                mapsBtn.href = iosScheme;
+                hint.textContent =
+                    "iOS: відкриє додаток Google Maps (якщо встановлено)";
+                // Спробуємо нативну схему, якщо не спрацює — залишається кнопка web
+                setTimeout(function () {
+                    window.location.href = iosScheme;
+                }, 100);
+            } else {
+                mapsBtn.href = webUrl;
+                setTimeout(function () {
+                    window.location.href = webUrl;
+                }, 50);
+            }
+        </script>
+    </body>
+</html>
