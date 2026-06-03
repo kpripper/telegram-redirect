@@ -22,23 +22,25 @@
   <p>Перенаправлення в Google Maps...</p>
 
   <script>
+    var cid = "2515077968720189199";
     var placeId = "ChIJAeAs-z3P1EARD1f6SxZa5yI";
+    var reviewUrl = "https://search.google.com/local/writereview?placeid=" + placeId;
     var ua = navigator.userAgent || "";
     var isAndroid = /Android/i.test(ua);
     var isIOS = /iPhone|iPad|iPod/i.test(ua);
-    var inTelegram = window.TelegramWebview !== undefined || /Telegram/i.test(ua);
 
     if (isAndroid) {
+      var fallback = encodeURIComponent(reviewUrl);
       window.location.replace(
-        "intent://maps.google.com/maps?place_id=" + placeId +
+        "intent://maps.google.com/maps?cid=" + cid +
         "#Intent;scheme=https;package=com.google.android.apps.maps;" +
-        "S.browser_fallback_url=https%3A%2F%2Fsearch.google.com%2Flocal%2Fwritereview%3Fplaceid%3D" + placeId +
+        "S.browser_fallback_url=" + fallback +
         ";end"
       );
     } else if (isIOS) {
-      window.location.replace("comgooglemaps://maps.google.com/maps?place_id=" + placeId);
+      window.location.replace("comgooglemaps://maps.google.com/maps?cid=" + cid);
     } else {
-      window.location.replace("https://search.google.com/local/writereview?placeid=" + placeId);
+      window.location.replace(reviewUrl);
     }
   </script>
 </body>
