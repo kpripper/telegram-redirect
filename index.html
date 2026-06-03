@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Залишити відгук</title>
+  <title>Перенаправлення...</title>
   <style>
-    * { box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       display: flex;
@@ -14,133 +13,32 @@
       min-height: 100vh;
       margin: 0;
       background: #f5f5f5;
-      padding: 16px;
-    }
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 32px 24px;
-      text-align: center;
-      max-width: 360px;
-      width: 100%;
-      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
-    }
-    .icon { font-size: 48px; margin-bottom: 12px; }
-    h1 {
-      font-size: 20px;
-      margin: 0 0 8px;
-      color: #1a1a1a;
-    }
-    p {
-      font-size: 14px;
       color: #666;
-      margin: 0 0 24px;
-      line-height: 1.5;
-    }
-    .btn {
-      display: block;
-      width: 100%;
-      background: #4285f4;
-      color: white;
-      text-decoration: none;
-      border: none;
-      border-radius: 10px;
-      padding: 14px 20px;
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 10px;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btn-secondary {
-      background: #f0f0f0;
-      color: #333;
-    }
-    .btn:last-child { margin-bottom: 0; }
-    .hint {
-      font-size: 12px;
-      color: #999;
-      margin-top: 16px;
-      line-height: 1.5;
-    }
-    .badge {
-      display: inline-block;
-      background: #e8f0fe;
-      color: #4285f4;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 4px;
-      margin-bottom: 12px;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="icon">&#11088;</div>
-    <h1>Залишити відгук</h1>
-    <p id="desc">Оберіть спосіб переходу, щоб залишити відгук про нас у Google Maps</p>
-
-    <button class="btn" id="maps-btn">Відкрити Google Maps</button>
-    <button class="btn btn-secondary" id="web-btn">Відкрити у браузері</button>
-
-    <p class="hint" id="hint"></p>
-  </div>
+  <p>Перенаправлення в Google Maps...</p>
 
   <script>
     var placeId = "ChIJAeAs-z3P1EARD1f6SxZa5yI";
-    var webUrl = "https://search.google.com/local/writereview?placeid=" + placeId;
     var ua = navigator.userAgent || "";
     var isAndroid = /Android/i.test(ua);
     var isIOS = /iPhone|iPad|iPod/i.test(ua);
     var inTelegram = window.TelegramWebview !== undefined || /Telegram/i.test(ua);
 
-    var mapsBtn = document.getElementById("maps-btn");
-    var webBtn = document.getElementById("web-btn");
-    var hint = document.getElementById("hint");
-    var desc = document.getElementById("desc");
-
     if (isAndroid) {
-      var intentUrl =
-        "intent://search.google.com/local/writereview?placeid=" + placeId +
-        "#Intent;scheme=https;package=com.android.chrome;end";
-
-      mapsBtn.addEventListener("click", function () {
-        window.location.href = intentUrl;
-      });
-
-      webBtn.addEventListener("click", function () {
-        window.location.href = webUrl;
-      });
-
-      hint.textContent = inTelegram
-        ? "Telegram: посилання відкриється в Chrome"
-        : "Відкриває сторінку відгуку в Google Chrome";
+      window.location.replace(
+        "intent://maps.google.com/maps?place_id=" + placeId +
+        "#Intent;scheme=https;package=com.google.android.apps.maps;" +
+        "S.browser_fallback_url=https%3A%2F%2Fsearch.google.com%2Flocal%2Fwritereview%3Fplaceid%3D" + placeId +
+        ";end"
+      );
     } else if (isIOS) {
-      var iosMapsUrl = "comgooglemaps://maps.google.com/maps?place_id=" + placeId;
-
-      mapsBtn.addEventListener("click", function () {
-        window.location.href = iosMapsUrl;
-      });
-
-      webBtn.addEventListener("click", function () {
-        window.location.href = webUrl;
-      });
-
-      if (inTelegram) {
-        hint.innerHTML =
-          "Telegram: якщо Google Maps не відкрився, натисніть &#8942; &rarr; Відкрити в браузері";
-      } else {
-        hint.textContent = "Відкриває додаток Google Maps (якщо встановлено)";
-      }
+      window.location.replace("comgooglemaps://maps.google.com/maps?place_id=" + placeId);
     } else {
-      mapsBtn.addEventListener("click", function () {
-        window.location.href = webUrl;
-      });
-
-      webBtn.style.display = "none";
-      mapsBtn.textContent = "Відкрити сторінку відгуку";
-      hint.style.display = "none";
+      window.location.replace("https://search.google.com/local/writereview?placeid=" + placeId);
     }
   </script>
 </body>
