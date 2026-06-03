@@ -19,10 +19,9 @@
   </style>
 </head>
 <body>
-  <p>Перенаправлення в Google Maps...</p>
+  <p>Перенаправлення у форму відгуку...</p>
 
   <script>
-    var cid = "2515077968720189199";
     var placeId = "ChIJAeAs-z3P1EARD1f6SxZa5yI";
     var reviewUrl = "https://search.google.com/local/writereview?placeid=" + placeId;
     var ua = navigator.userAgent || "";
@@ -30,15 +29,16 @@
     var isIOS = /iPhone|iPad|iPod/i.test(ua);
 
     if (isAndroid) {
-      var fallback = encodeURIComponent(reviewUrl);
       window.location.replace(
-        "intent://maps.google.com/maps?cid=" + cid +
-        "#Intent;scheme=https;package=com.google.android.apps.maps;" +
-        "S.browser_fallback_url=" + fallback +
+        "intent://search.google.com/local/writereview?placeid=" + placeId +
+        "#Intent;scheme=https;package=com.android.chrome;" +
+        "S.browser_fallback_url=" + encodeURIComponent(reviewUrl) +
         ";end"
       );
     } else if (isIOS) {
-      window.location.replace("comgooglemaps://maps.google.com/maps?cid=" + cid);
+      window.location.replace(
+        "googlechrome://navigate?url=" + encodeURIComponent(reviewUrl)
+      );
     } else {
       window.location.replace(reviewUrl);
     }
